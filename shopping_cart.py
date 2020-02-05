@@ -31,14 +31,21 @@ products = [
 # TODO: write some Python code here to produce the desired output
 
 pretax_price = 0
+total_price = 0
 selectedids = []
 
+while True:
+    selectedid = input("Please enter a product identifier, and type DONE when complete: ")
+    if selectedid == "DONE":
+        break
+    else:
+        matching_products = [p for p in products if str(p["id"]) == str(selectedid)]
+        matching_product = matching_products[0]
+        total_price = total_price + (matching_product["price"])
+        print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
 
-selectedid = input("Please enter a product identifier, and type DONE when complete: ")
-matching_products = [p for p in products if str(p["id"]) == str(selectedid)]
-matching_product = matching_products[0]
-#print((matching_product))
-print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+print("TOTAL PRICE: " + str(total_price))
+
 
 #x = selectedid.isnumeric()
 #if x: #go back to input after storing the data, do something with p1 string
