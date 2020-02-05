@@ -56,21 +56,21 @@ for selectedid in selectedids:
     #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
 
 tax = total_price * .06
-print(">---------------------------------")
+print("> ---------------------------------")
 print("> LION ENTERPRISES GROCERY")
 print("> WWW.LION-ENTERPRISES-GROCERY.COM")
-print(">---------------------------------")
-print(">CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) #insert time here
-print(">---------------------------------")
-print(">SELECTED PRODUCTS: ")
+print("> ---------------------------------")
+print("> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) #insert time here
+print("> ---------------------------------")
+print("> SELECTED PRODUCTS: ")
 for selectedid in selectedids:
     matching_products = [p for p in products if str(p["id"]) == str(selectedid)]
     matching_product = matching_products[0]
-    print(">" + "..." + matching_product["name"] + " " + "(" + str('${:.2f}'.format(matching_product["price"]) + ")")) 
+    print(">" + "   "  +  "..." + matching_product["name"] + " " + "(" + str('${:.2f}'.format(matching_product["price"]) + ")")) 
 
-print(">---------------------------------")
-print("SUBTOTAL: " + str('${:.2f}'.format(total_price)))
-print("TAX: " + str('${:.2f}'.format(tax)))
-print("TOTAL: " + str('${:.2f}'.format(tax + total_price)))
-print(">---------------------------------")
+print("> ---------------------------------")
+print("> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
+print("> TAX: " + str('${:.2f}'.format(tax)))
+print("> TOTAL: " + str('${:.2f}'.format(tax + total_price)))
+print("> ---------------------------------")
 print("THANKS, SEE YOU SOON!")
