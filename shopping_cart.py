@@ -2,6 +2,14 @@
 
 #from pprint import pprint
 
+import datetime
+
+date = datetime.date.today()
+
+from datetime import datetime
+now = datetime.now()
+
+
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -30,7 +38,6 @@ products = [
 
 # TODO: write some Python code here to produce the desired output
 
-pretax_price = 0
 total_price = 0
 selectedids = []
 
@@ -39,27 +46,31 @@ while True:
     if selectedid == "DONE":
         break
     else:
-        matching_products = [p for p in products if str(p["id"]) == str(selectedid)]
-        matching_product = matching_products[0]
-        total_price = total_price + (matching_product["price"])
-        print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
-
-print("TOTAL PRICE: " + str(total_price))
-
-
-#x = selectedid.isnumeric()
-#if x: #go back to input after storing the data, do something with p1 string
-    
-#elif selectedid == 'DONE': #print receipt, relatively easy
-#    print(">---------------------------------")
-#    print("> LION ENTERPRISES GROCERY")
-#    print("> WWW.LION-ENTERPRISES-GROCERY.COM")
-#    print(">---------------------------------")
-#else: #error message
-#    print("Please enter a valid identifier.")
-    
+        selectedids.append(selectedid)
         
 
+for selectedid in selectedids:
+    matching_products = [p for p in products if str(p["id"]) == str(selectedid)]
+    matching_product = matching_products[0]
+    total_price = total_price + (matching_product["price"])
+    #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
 
+tax = total_price * .06
+print(">---------------------------------")
+print("> LION ENTERPRISES GROCERY")
+print("> WWW.LION-ENTERPRISES-GROCERY.COM")
+print(">---------------------------------")
+print(">CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) #insert time here
+print(">---------------------------------")
+print(">SELECTED PRODUCTS: ")
+for selectedid in selectedids:
+    matching_products = [p for p in products if str(p["id"]) == str(selectedid)]
+    matching_product = matching_products[0]
+    print(">" + "..." + matching_product["name"] + " " + "(" + str('${:.2f}'.format(matching_product["price"]) + ")")) 
 
-
+print(">---------------------------------")
+print("SUBTOTAL: " + str('${:.2f}'.format(total_price)))
+print("TAX: " + str('${:.2f}'.format(tax)))
+print("TOTAL: " + str('${:.2f}'.format(tax + total_price)))
+print(">---------------------------------")
+print("THANKS, SEE YOU SOON!")
