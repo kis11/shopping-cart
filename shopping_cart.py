@@ -49,6 +49,12 @@ while True:
     selectedid = input("Please enter a product identifier, and type DONE when complete: ")
     if selectedid == "DONE":
         break
+    elif selectedid.isnumeric() == False:
+        print("Invalid identifier, please try again.")
+        exit
+    elif int(selectedid)> len(storeproducts) : #source: https://stackoverflow.com/questions/20297332/how-do-i-retrieve-the-number-of-columns-in-a-pandas-data-frame
+        print("Invalid identifier, please try again.")
+        exit
     else:
         selectedids.append(selectedid)
         
@@ -61,23 +67,23 @@ for selectedid in selectedids:
     #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
 
 tax = total_price * .06
-print("> ---------------------------------")
-print("> LION ENTERPRISES GROCERY")
-print("> WWW.LION-ENTERPRISES-GROCERY.COM")
-print("> ---------------------------------")
-print("> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) #insert time here
-print("> ---------------------------------")
-print("> SELECTED PRODUCTS: ")
+print("#> ---------------------------------")
+print("#> LION ENTERPRISES GROCERY")
+print("#> WWW.LION-ENTERPRISES-GROCERY.COM")
+print("#> ---------------------------------")
+print("#> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) #insert time here
+print("#> ---------------------------------")
+print("#> SELECTED PRODUCTS: ")
 for selectedid in selectedids:
     selectedid = int(selectedid)
     matching_product = storeproducts.loc[selectedid]
     matchingproductname = storeproducts.loc[selectedid].at["name"]
-    print(">" + "   "  +  "..." + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")")) 
+    print("#>" + "  "  +  "..." + "  " + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")")) 
 
-print("> ---------------------------------")
-print("> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
-print("> TAX: " + str('${:.2f}'.format(tax)))
-print("> TOTAL: " + str('${:.2f}'.format(tax + total_price)))
-print("> ---------------------------------")
-print("THANKS, SEE YOU AGAIN SOON!")
-print("> ---------------------------------")
+print("#> ---------------------------------")
+print("#> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
+print("#> TAX: " + str('${:.2f}'.format(tax)))
+print("#> TOTAL: " + str('${:.2f}'.format(tax + total_price)))
+print("#> ---------------------------------")
+print("#> THANKS, SEE YOU AGAIN SOON!")
+print("#> ---------------------------------")
