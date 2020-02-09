@@ -6,6 +6,10 @@ import csv
 import datetime
 import os
 import pandas
+import json
+from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 
 date = datetime.date.today()
@@ -44,12 +48,13 @@ storeproducts = pandas.read_csv(csv_filepath)
 
 total_price = 0
 selectedids = []
+productdict = []
 
 while True:
     selectedid = input("Please enter a product identifier, and type DONE when complete: ")
     if selectedid == "DONE":
         break
-    elif selectedid.isnumeric() == False:
+    elif selectedid.isnumeric() == False: #source:https://www.w3schools.com/python/ref_string_isnumeric.asp
         print("Invalid identifier, please try again.")
         exit
     elif int(selectedid)> len(storeproducts) : #source: https://stackoverflow.com/questions/20297332/how-do-i-retrieve-the-number-of-columns-in-a-pandas-data-frame
@@ -61,23 +66,59 @@ while True:
 
 for selectedid in selectedids:
     selectedid = int(selectedid)
-    matching_product = storeproducts.loc[selectedid]
-    matchingproductprice = storeproducts.loc[selectedid].at["price"]
+    matching_product = storeproducts.loc[selectedid-1]
+    matchingproductprice = storeproducts.loc[selectedid-1].at["price"]
+    matchingproductname = storeproducts.loc[selectedid-1].at["name"]
     total_price = total_price + matchingproductprice
-    #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+    matchingproductlist = productdict.append({"id":int(storeproducts.loc[selectedid-1].at["id"]), "name": matchingproductname})
+
+
+emailreceipt = input("Would you like an email receipt? Please respond yes or no:")
+    
+if emailreceipt == "no":
+    exit
+elif emailreceipt == "yes":
+    receiptlist = []
+    for selectedid in selectedids:
+        selectedid = int(selectedid)
+        receiptlist.append(storeproducts.loc[selectedid-1].at["name"])
+    receiptlist = str(receiptlist)[1:-1]
+    load_dotenv()
+    tax = total_price * .06
+    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+    MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+
+       #"products": productdict.append({"id":storeproducts.loc[selectedid-1].at["id"], "name": matchingproductname}}
+    template_data = {
+    "total_price_usd": str('${:.2f}'.format(tax + total_price)),
+    "human_friendly_timestamp": date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p"),
+    "products": receiptlist
+    }    
+    client = SendGridAPIClient(SENDGRID_API_KEY) 
+    message = Mail(from_email=MY_EMAIL_ADDRESS, to_emails=MY_EMAIL_ADDRESS)
+    message.template_id = SENDGRID_TEMPLATE_ID 
+    message.dynamic_template_data = template_data
+    try:
+        response = client.send(message)
+    except Exception as e:
+        print("OOPS", e)
+else:
+    print("Invalid entry, assumed no.") #fix this
 
 tax = total_price * .06
 print("#> ---------------------------------")
 print("#> LION ENTERPRISES GROCERY")
 print("#> WWW.LION-ENTERPRISES-GROCERY.COM")
 print("#> ---------------------------------")
-print("#> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) #insert time here
+print("#> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) 
 print("#> ---------------------------------")
 print("#> SELECTED PRODUCTS: ")
 for selectedid in selectedids:
     selectedid = int(selectedid)
-    matching_product = storeproducts.loc[selectedid]
-    matchingproductname = storeproducts.loc[selectedid].at["name"]
+    matching_product = storeproducts.loc[selectedid-1]
+    matchingproductprice = storeproducts.loc[selectedid-1].at["price"]
+    matchingproductname = storeproducts.loc[selectedid-1].at["name"]
     print("#>" + "  "  +  "..." + "  " + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")")) 
 
 print("#> ---------------------------------")
@@ -87,3 +128,10 @@ print("#> TOTAL: " + str('${:.2f}'.format(tax + total_price)))
 print("#> ---------------------------------")
 print("#> THANKS, SEE YOU AGAIN SOON!")
 print("#> ---------------------------------")
+
+#for selectedid in selectedids:
+ #       selectedid = int(selectedid)
+  #      receiptlist = print(storeproducts.loc[selectedid-1].at["name"])
+
+
+
