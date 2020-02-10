@@ -23,9 +23,6 @@ total_price = 0
 tax = total_price * .06
 selectedids = []
 productdict = []
-def poundsfunc(): #source: https://www.w3schools.com/python/ref_keyword_global.asp
-    global pounds
-    pounds = input("How many pounds?")
 
 while True:
     selectedid = input("Please enter a product identifier, and type DONE in all caps when complete: ")
@@ -38,32 +35,33 @@ while True:
         print("Invalid identifier, please try again.")
         exit
     else:
-        selectedids.append(int(selectedid))
-        for selectedid in selectedids:
-            selectedid = int(selectedid)
-            if (storeproducts.at[selectedid-1,'price_per'])==0:
-                matchingproductprice = storeproducts.loc[selectedid-1].at["price"]
-                matchingproductname = storeproducts.loc[selectedid-1].at["name"]
-                total_price = total_price + matchingproductprice
-                matchingproductlist = productdict.append({"id":int(storeproducts.loc[selectedid-1].at["id"]), "name": matchingproductname})
-            else:
-                poundsfunc()
-                while True:
-                    if pounds.isnumeric():
-                        break
-                    else:
-                        print("Please try again.")
-                        exit
-                matchingproductprice = storeproducts.loc[selectedid-1].at["price_per"] * int(pounds)
-                matchingproductname = storeproducts.loc[selectedid-1].at["name"]
-                total_price = total_price + matchingproductprice
-                matchingproductlist = productdict.append({"id":int(storeproducts.loc[selectedid-1].at["id"]), "name": matchingproductname})   
-     
+        selectedids.append(int(selectedid)-1)
+
+print("#> ---------------------------------")
+print("#> LION ENTERPRISES GROCERY")
+print("#> WWW.LION-ENTERPRISES-GROCERY.COM")
+print("#> ---------------------------------")
+print("#> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) 
+print("#> ---------------------------------")
+print("#> SELECTED PRODUCTS: ")
+for selectedid in selectedids:
+    selectedid = int(selectedid)
+    matchingproductprice = storeproducts.loc[selectedid].at["price"]
+    matchingproductname = storeproducts.loc[selectedid].at["name"]
+    print("#>" + "  "  +  "..." + "  " + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")"))
+    total_price = total_price + matchingproductprice 
+tax = total_price * .06
+print("#> ---------------------------------")
+print("#> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
+print("#> TAX: " + str('${:.2f}'.format(tax)))
+print("#> TOTAL: " + str('${:.2f}'.format(tax + total_price)))
+print("#> ---------------------------------")
+print("#> THANKS, SEE YOU AGAIN SOON!")
+print("#> ---------------------------------")
+
 while True:
-    emailreceipt = input("Would you like an email receipt? Please respond yes or no:")
+    emailreceipt = input("Would you like an email receipt too? Please respond yes or no:")
     if emailreceipt == "yes" or "Yes" or "YES":
-        for selectedid in selectedids:
-            selectedid = int(selectedid)
         storeproducts2 = storeproducts[['id', 'name', 'price']].copy()
         storeproducts2['price'] = storeproducts2['price'].map('${:,.2f}'.format)
         storeproducts2 = storeproducts2.take(selectedids) #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.take.html
@@ -72,7 +70,6 @@ while True:
         SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
         MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
         SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
-        tax = total_price * .06
         template_data = {
         "subtotal_price_usd": str('${:.2f}'.format(total_price)),
         "tax_price_usd": str('${:.2f}'.format(tax)),
@@ -87,37 +84,12 @@ while True:
         try:
             response = client.send(message)
         except Exception as e:
-            print("OOPS", e)
+            print("Oops, Sendgrid is down.", e)
         break
     elif emailreceipt == "no" or "No" or "NO": 
+        print("OK, thanks again.")
         break
     else:
         print("Sorry, try again.")
-
-print("#> ---------------------------------")
-print("#> LION ENTERPRISES GROCERY")
-print("#> WWW.LION-ENTERPRISES-GROCERY.COM")
-print("#> ---------------------------------")
-print("#> CHECKOUT ON " + date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p")) 
-print("#> ---------------------------------")
-print("#> SELECTED PRODUCTS: ")
-for selectedid in selectedids:
-    selectedid = int(selectedid)
-    if storeproducts.loc[selectedid-1].at["price_per"]==0:
-        matchingproductprice = storeproducts.loc[selectedid-1].at["price"]
-    else:
-        matchingproductprice = storeproducts.loc[selectedid-1].at["price_per"] * int(pounds)
-    matchingproductname = storeproducts.loc[selectedid-1].at["name"]
-    print("#>" + "  "  +  "..." + "  " + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")")) 
-tax = total_price * .06
-print("#> ---------------------------------")
-print("#> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
-print("#> TAX: " + str('${:.2f}'.format(tax)))
-print("#> TOTAL: " + str('${:.2f}'.format(tax + total_price)))
-print("#> ---------------------------------")
-print("#> THANKS, SEE YOU AGAIN SOON!")
-print("#> ---------------------------------")
-
-
 
 
