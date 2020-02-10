@@ -20,7 +20,7 @@ csv_filepath = os.path.join(os.path.dirname(__file__), "data", "products.csv")
 storeproducts = pandas.read_csv(csv_filepath)
 
 total_price = 0
-tax = total_price * .06
+tax = total_price * .0875
 selectedids = []
 productdict = []
 
@@ -50,7 +50,7 @@ for selectedid in selectedids:
     matchingproductname = storeproducts.loc[selectedid].at["name"]
     print("#>" + "  "  +  "..." + "  " + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")"))
     total_price = total_price + matchingproductprice 
-tax = total_price * .06
+tax = total_price * .0875
 print("#> ---------------------------------")
 print("#> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
 print("#> TAX: " + str('${:.2f}'.format(tax)))
