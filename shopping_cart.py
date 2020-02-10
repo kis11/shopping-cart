@@ -10,14 +10,17 @@ import json
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from datetime import datetime
 
 date = datetime.date.today()
+
+from datetime import datetime
 now = datetime.now()
+
 csv_filepath = os.path.join(os.path.dirname(__file__), "data", "products.csv")
 storeproducts = pandas.read_csv(csv_filepath)
 
 total_price = 0
+tax = total_price * .06
 selectedids = []
 productdict = []
 def poundsfunc(): #source: https://www.w3schools.com/python/ref_keyword_global.asp
@@ -39,7 +42,6 @@ while True:
         for selectedid in selectedids:
             selectedid = int(selectedid)
             if (storeproducts.at[selectedid-1,'price_per'])==0:
-                matching_product = storeproducts.loc[selectedid-1]
                 matchingproductprice = storeproducts.loc[selectedid-1].at["price"]
                 matchingproductname = storeproducts.loc[selectedid-1].at["name"]
                 total_price = total_price + matchingproductprice
@@ -52,52 +54,46 @@ while True:
                     else:
                         print("Please try again.")
                         exit
-                matching_product = storeproducts.loc[selectedid-1]
                 matchingproductprice = storeproducts.loc[selectedid-1].at["price_per"] * int(pounds)
                 matchingproductname = storeproducts.loc[selectedid-1].at["name"]
                 total_price = total_price + matchingproductprice
                 matchingproductlist = productdict.append({"id":int(storeproducts.loc[selectedid-1].at["id"]), "name": matchingproductname})   
-                
-        
-        
+      
+while True:
+    emailreceipt = input("Would you like an email receipt? Please respond yes or no:")
+    if emailreceipt == "yes":
+        receiptlist = []
+        for selectedid in selectedids:
+            selectedid = int(selectedid)
+            receiptlist.append(storeproducts.loc[selectedid-1].at["name"])
+        receiptlist = str(receiptlist)[1:-1]
+        receiptlist = receiptlist.replace("'","") #https://stackoverflow.com/questions/12604619/removing-the-single-quote-from-a-list-of-ids
+        load_dotenv()
+        SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+        MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+        SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+        tax = total_price * .06
+        template_data = {
+        "subtotal_price_usd": str('${:.2f}'.format(total_price)),
+        "tax_price_usd": str('${:.2f}'.format(tax)),
+        "total_price_usd": str('${:.2f}'.format(tax + total_price)),
+        "human_friendly_timestamp": date.strftime("%B %d, %Y") + " at " + now.strftime("%I:%M:%S %p"),
+        "products": receiptlist
+        }    
+        client = SendGridAPIClient(SENDGRID_API_KEY) 
+        message = Mail(from_email=MY_EMAIL_ADDRESS, to_emails=MY_EMAIL_ADDRESS)
+        message.template_id = SENDGRID_TEMPLATE_ID 
+        message.dynamic_template_data = template_data
+        try:
+            response = client.send(message)
+        except Exception as e:
+            print("OOPS", e)
+        break
+    elif emailreceipt == "no": 
+        break
+    else:
+        print("Sorry, try again.")
 
-
-
-emailreceipt = input("Would you like an email receipt? Please respond yes or no:")
-    
-if emailreceipt == "no":
-    exit
-elif emailreceipt == "yes":
-    receiptlist = []
-    for selectedid in selectedids:
-        selectedid = int(selectedid)
-        receiptlist.append(storeproducts.loc[selectedid-1].at["name"])
-    receiptlist = str(receiptlist)[1:-1]
-    load_dotenv()
-    tax = total_price * .06
-    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
-    MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
-    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
-
-       #"products": productdict.append({"id":storeproducts.loc[selectedid-1].at["id"], "name": matchingproductname}}
-    template_data = {
-    "total_price_usd": str('${:.2f}'.format(tax + total_price)),
-    "human_friendly_timestamp": date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p"),
-    "products": receiptlist
-    }    
-    client = SendGridAPIClient(SENDGRID_API_KEY) 
-    message = Mail(from_email=MY_EMAIL_ADDRESS, to_emails=MY_EMAIL_ADDRESS)
-    message.template_id = SENDGRID_TEMPLATE_ID 
-    message.dynamic_template_data = template_data
-    try:
-        response = client.send(message)
-    except Exception as e:
-        print("OOPS", e)
-else:
-    print("Invalid entry, try again.")
-    exit
-
-tax = total_price * .06
 print("#> ---------------------------------")
 print("#> LION ENTERPRISES GROCERY")
 print("#> WWW.LION-ENTERPRISES-GROCERY.COM")
@@ -107,14 +103,13 @@ print("#> ---------------------------------")
 print("#> SELECTED PRODUCTS: ")
 for selectedid in selectedids:
     selectedid = int(selectedid)
-    matching_product = storeproducts.loc[selectedid-1]
     if storeproducts.loc[selectedid-1].at["price_per"]==0:
         matchingproductprice = storeproducts.loc[selectedid-1].at["price"]
     else:
         matchingproductprice = storeproducts.loc[selectedid-1].at["price_per"] * int(pounds)
     matchingproductname = storeproducts.loc[selectedid-1].at["name"]
     print("#>" + "  "  +  "..." + "  " + matchingproductname + " " + "(" + str('${:.2f}'.format(matchingproductprice) + ")")) 
-
+tax = total_price * .06
 print("#> ---------------------------------")
 print("#> SUBTOTAL: " + str('${:.2f}'.format(total_price)))
 print("#> TAX: " + str('${:.2f}'.format(tax)))
@@ -123,12 +118,37 @@ print("#> ---------------------------------")
 print("#> THANKS, SEE YOU AGAIN SOON!")
 print("#> ---------------------------------")
 
-
-
-
-#for selectedid in selectedids:
- #       selectedid = int(selectedid)
-  #      receiptlist = print(storeproducts.loc[selectedid-1].at["name"])
+#emailreceipt = input("Would you like an email receipt? Please respond yes or no:")
+#
+#if emailreceipt == "no":
+#        exit
+#elif emailreceipt == "yes":
+#    receiptlist = []
+#    for selectedid in selectedids:
+#        selectedid = int(selectedid)
+#        receiptlist.append(storeproducts.loc[selectedid-1].at["name"])
+#    receiptlist = str(receiptlist)[1:-1]
+#    load_dotenv()
+#    tax = total_price * .06
+#    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
+#    MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
+#    SENDGRID_TEMPLATE_ID = os.environ.get("SENDGRID_TEMPLATE_ID", "OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+#    template_data = {
+#    "total_price_usd": str('${:.2f}'.format(tax + total_price)),
+#    "human_friendly_timestamp": date.strftime("%B %d, %Y") + " AT " + now.strftime("%I:%M:%S %p"),
+#    "products": receiptlist
+#    }    
+#    client = SendGridAPIClient(SENDGRID_API_KEY) 
+#    message = Mail(from_email=MY_EMAIL_ADDRESS, to_emails=MY_EMAIL_ADDRESS)
+#    message.template_id = SENDGRID_TEMPLATE_ID 
+#    message.dynamic_template_data = template_data
+#    try:
+#        response = client.send(message)
+#    except Exception as e:
+#        print("OOPS", e)
+#else:
+#    print("Invalid entry, try again.")
+#    continue
 
 
 
