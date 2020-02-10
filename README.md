@@ -10,7 +10,19 @@ conda create -n shopping-env python=3.7 # (first time only)
 conda activate shopping-env
 ```
 
-Then, access the folder shopping-cart. 
+You also need to make sure you install the necessary packages to run the program. These are:
+
+csv
+datetime
+os
+pandas
+json
+dotenv
+sendgrid
+
+Use the "pip install" format to install these packages when you first create the virtual environment. 
+
+Then, access the folder shopping-cart within the environment. 
 
 
-My version includes email capability, so you have the option to choose whether you want both a receipt prompt and email receipt or just the receipt prompt. Thanks and happy shopping. 
+My version includes email capability, so you have the option to choose whether you want both a receipt prompt and an email receipt, or just the receipt prompt. Thanks and happy shopping. 
