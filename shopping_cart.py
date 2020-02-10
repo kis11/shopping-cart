@@ -29,10 +29,10 @@ while True:
     if selectedid == "DONE":
         break
     elif selectedid.isnumeric() == False: #source:https://www.w3schools.com/python/ref_string_isnumeric.asp
-        print("Invalid identifier, please try again.")
+        print("Invalid identifier entered, please try again.")
         exit
     elif int(selectedid)> len(storeproducts) : #source: https://stackoverflow.com/questions/20297332/how-do-i-retrieve-the-number-of-columns-in-a-pandas-data-frame
-        print("Invalid identifier, please try again.")
+        print("Invalid identifier entered, please try again.")
         exit
     else:
         selectedids.append(int(selectedid)-1)
@@ -84,7 +84,7 @@ while True:
         try:
             response = client.send(message)
         except Exception as e:
-            print("Oops, Sendgrid is down.", e)
+            print("Oops, Sendgrid is down. Our bad.", e)
         break
     elif emailreceipt == "no" or "No" or "NO": 
         break
