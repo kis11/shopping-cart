@@ -65,7 +65,7 @@ while True:
         storeproducts2 = storeproducts[['id', 'name', 'price']].copy()
         storeproducts2['price'] = storeproducts2['price'].map('${:,.2f}'.format)
         storeproducts2 = storeproducts2.take(selectedids) #https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.take.html
-        receiptlist2 = storeproducts2.to_dict('records')
+        receiptlist = storeproducts2.to_dict('records')
         load_dotenv()
         SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "OOPS, please set env var called 'SENDGRID_API_KEY'")
         MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "OOPS, please set env var called 'MY_EMAIL_ADDRESS'")
@@ -75,7 +75,7 @@ while True:
         "tax_price_usd": str('${:.2f}'.format(tax)),
         "total_price_usd": str('${:.2f}'.format(tax + total_price)),
         "human_friendly_timestamp": date.strftime("%B %d, %Y") + " at " + now.strftime("%I:%M:%S %p"),
-        "products": receiptlist2
+        "products": receiptlist
         }    
         client = SendGridAPIClient(SENDGRID_API_KEY) 
         message = Mail(from_email=MY_EMAIL_ADDRESS, to_emails=MY_EMAIL_ADDRESS)
@@ -87,9 +87,8 @@ while True:
             print("Oops, Sendgrid is down.", e)
         break
     elif emailreceipt == "no" or "No" or "NO": 
-        print("OK, thanks again.")
         break
     else:
         print("Sorry, try again.")
-
+print("OK, got it. Thanks again.")
 
