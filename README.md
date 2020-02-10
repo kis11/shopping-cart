@@ -26,5 +26,4 @@ Use the "pip install" format to install these packages when you first create the
 
 Then, access the folder shopping-cart within the environment. 
 
-
-My version includes email capability, so you have the option to choose whether you want both a receipt prompt and an email receipt, or just the receipt prompt. Thanks and happy shopping. 
+When you type "python shopping_cart.py", the prompt should open and you may select the identifiers chosen at the store. When you are done, make sure you type DONE in all caps. Then, your receipt will pop up. You will then have the option to also receive an email receipt. Thanks and happy shopping. 
