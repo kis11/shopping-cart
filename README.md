@@ -12,6 +12,7 @@ conda activate shopping-env
 
 You also need to make sure you install the necessary packages to run the program. These are:
 
+```sh
 csv
 datetime
 os
@@ -19,6 +20,7 @@ pandas
 json
 dotenv
 sendgrid
+```
 
 Use the "pip install" format to install these packages when you first create the virtual environment. 
 
