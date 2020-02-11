@@ -86,7 +86,7 @@ Set the email address to the intended recipient. The template ID should be visib
 
 Important: Make sure you also have a .gitignore file, that includes .env.
 
-In your virtual environment, make sure you are navigated to the shopping-cart folder, and then type "shopping_cart.py". 
+In your virtual environment, make sure you are navigated to the shopping-cart folder, and then type "python shopping_cart.py". 
 
 
 The prompt should open and you may select the identifiers chosen at the store. When you are done, make sure you type DONE in all caps. Then, your receipt will pop up. You will then have the option to also receive an email receipt, which will be sent to the designated recipient. 
