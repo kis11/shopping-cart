@@ -24,7 +24,7 @@ sendgrid
 
 Use the "pip install" format to install these packages when you first create the virtual environment. Consult the professor's Github repository if you need extra details. 
 
-Fork the folder and clone it onto your computer.
+On Github, fork the folder and clone it onto your computer.
 
 Then, access the folder shopping-cart within the environment:
 
