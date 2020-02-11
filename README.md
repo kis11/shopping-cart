@@ -24,6 +24,12 @@ sendgrid
 
 Use the "pip install" format to install these packages when you first create the virtual environment. 
 
-Then, access the folder shopping-cart within the environment. 
+Fork the folder and clone it onto your computer.
 
-When you type "python shopping_cart.py", the prompt should open and you may select the identifiers chosen at the store. When you are done, make sure you type DONE in all caps. Then, your receipt will pop up. You will then have the option to also receive an email receipt. Thanks and happy shopping. 
+Then, access the folder shopping-cart within the environment:
+
+```sh
+cd ~/selectedpathonyourcomputer/shopping-cart/shopping_cart.py
+```
+
+The prompt should open and you may select the identifiers chosen at the store. When you are done, make sure you type DONE in all caps. Then, your receipt will pop up. You will then have the option to also receive an email receipt. Thanks and happy shopping. 
