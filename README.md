@@ -29,7 +29,7 @@ On Github, fork the folder and clone it onto your computer. Make sure you includ
 Then, access the folder shopping-cart within the environment:
 
 ```sh
-cd ~/selectedpathonyourcomputer/shopping-cart/shopping_cart.py
+cd ~/selectedpathonyourcomputer/shopping-cart/
 ```
 
 ## Email Functionality 
