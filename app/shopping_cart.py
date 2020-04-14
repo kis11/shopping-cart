@@ -11,12 +11,13 @@ from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+
 date = datetime.date.today()
 
 from datetime import datetime
 now = datetime.now()
 
-csv_filepath = os.path.join(os.path.dirname(__file__), "data", "products.csv")
+csv_filepath = os.path.join(os.path.dirname(__file__), '..', "data", "products.csv")
 storeproducts = pandas.read_csv(csv_filepath)
 
 total_price = 0
