@@ -18,7 +18,6 @@ def calc_tax(number):
     return number * .0875
 def to_usd(number):
     return str('${:.2f}'.format(number)) #todo: change the below to to_usd to simplify
-
 def email_info():
     storeproducts2 = storeproducts[['id', 'name', 'price']].copy()
     storeproducts2['price'] = storeproducts2['price'].map('${:,.2f}'.format)
@@ -40,7 +39,7 @@ def email_info():
     message.template_id = SENDGRID_TEMPLATE_ID 
     message.dynamic_template_data = template_data
     try:
-        response = client.send(message)
+        client.send(message)
     except Exception as e:
         print("Oops, Sendgrid is down. Our bad.", e)
 
@@ -100,6 +99,5 @@ while True:
         break
     else:
         print("Sorry, try again.")
-
 print("OK, got it. Thanks again.")
 
