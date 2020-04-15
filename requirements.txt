@@ -1,5 +1,5 @@
 pandas
---upgrade setuptools
+-upgrade setuptools
 dotenv
 sendgrid
 pytest
