@@ -18,6 +18,6 @@ def test_find_price():
         {"id":3, "name": "Robust Golden Unsweetened Oolong Tea", "department": "beverages", "aisle": "tea", "price": 2.49}
     ]
     products = pandas.DataFrame(products)
-    assert find_price(products,2-1) == 4.99 #id is minus 1 such as to demonstrate that pandas counts the first row as zero
+    assert find_price(products,2-1) == 4.99 #id is minus 1 such as to demonstrate that pandas counts the first row as zero.
 
 
