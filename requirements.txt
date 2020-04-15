@@ -1,4 +1,4 @@
 pandas
-dotenv
+python-dotenv
 sendgrid
 pytest
