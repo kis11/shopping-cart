@@ -14,10 +14,10 @@ def test_calc_tax():
 def test_find_price():
     products = [
         {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
-        {"id":3, "name": "Robust Golden Unsweetened Oolong Tea", "department": "beverages", "aisle": "tea", "price": 2.49},
         {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
+        {"id":3, "name": "Robust Golden Unsweetened Oolong Tea", "department": "beverages", "aisle": "tea", "price": 2.49}
     ]
     products = pandas.DataFrame(products)
-    assert find_price(products,3) == 2.49
+    assert find_price(products,2-1) == 4.99 #id is minus 1 such as to demonstrate that pandas counts the first row as zero
 
 

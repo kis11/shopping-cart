@@ -14,10 +14,36 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 def calc_tax(number):
+    """
+    Changes numbers into its taxable amount.
+
+    Params:
+      number (numeric), the number you want to be turned into a taxable amount.
+
+    Example:
+      calc_tax(100) - would give you 8.75
+      calc_tax(4.49) - would give you 0.392875
+    """
     return number * .0875
 def to_usd(number):
+    """
+    Changes numbers into USD dollar format.
+
+    Params:
+      number (numeric), the number you want to be turned into dollar formatting
+
+    Example:
+      to_usd(3) 
+      to_usd(4.49)
+    """
     return str('${:.2f}'.format(number)) #todo: change the below to to_usd to simplify
 def email_info():
+    """
+    Sends the email version of the receipt to the designated recipient.
+
+    Params:
+      n/a
+    """
     global selectedid
     storeproducts2 = storeproducts[['id', 'name', 'price']].copy()
     storeproducts2['price'] = storeproducts2['price'].map('${:,.2f}'.format)
@@ -43,8 +69,26 @@ def email_info():
     except Exception as e:
         print("Oops, Sendgrid is down. Our bad.", e)
 def find_price(dataframe,id):
+    """
+    Identifies the price of an item given its id in a datafram
+
+    Params:
+        dataframe (pandas dataframe), the number you want to be turned into dollar formatting
+        id (numberic), the number that corresponds to the product's id
+    Example:
+        find_price(products,3) - would give you 2.49, the price of item 3
+    """
     return dataframe.loc[id].at["price"]
 def find_name(dataframe,id):
+    """
+    Identifies the name of an item given its id in a datafram
+
+    Params:
+        dataframe (pandas dataframe), the number you want to be turned into dollar formatting
+        name (string), the number that corresponds to the product's id
+    Example:
+        find_name(products,3) - would give you "Robust Golden Unsweetened Oolong Tea", the name of item 3
+    """
     return dataframe.loc[id].at["name"]
 
 if __name__=="__main__":
