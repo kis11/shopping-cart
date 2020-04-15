@@ -9,7 +9,7 @@ def test_to_usd():
 
 def test_calc_tax():
     result = calc_tax(100)
-    assert result == "8.75"
+    assert result == 8.75
 
 def test_find_price():
     products = [
